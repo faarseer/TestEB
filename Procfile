@@ -1,1 +1,1 @@
-web: dotnet ./app/AWSCodePipelineDemo.dll
+web: dotnet ./app/TestEB.dll
