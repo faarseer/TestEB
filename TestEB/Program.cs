@@ -9,8 +9,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 
 // Add Db
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+//var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 //var connectionString = Helpers.GetRDSConnectionString();
+var connectionString = "Server=awseb-e-7sevd4snji-stack-awsebrdsdatabase-5xhtsbabrtyq.c4leokrb7cia.ap-northeast-2.rds.amazonaws.com;Port=3306;Uid=admin;pwd=test123!;Database=ebdb;";
 var serverVersion = new MySqlServerVersion(new Version(8, 0, 32));
 builder.Services.AddDbContext<TodoContext>(options =>
 {
