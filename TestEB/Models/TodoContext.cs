@@ -6,7 +6,7 @@ namespace TestEB.Models
     public class TodoContext : DbContext
     {
         public TodoContext(DbContextOptions<TodoContext> options)
-            : base()
+            : base(options)
         {
         }
 
