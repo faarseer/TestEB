@@ -1,7 +1,7 @@
 using TestEB.Models;
 using Pomelo.EntityFrameworkCore.MySql;
 using Microsoft.EntityFrameworkCore;
-using ConfigurationManager = System.Configuration.ConfigurationManager;
+using Microsoft.Extensions.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,7 +12,10 @@ builder.Services.AddControllers();
 // Add Db
 //var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 //var connectionString = Helpers.GetRDSConnectionString();
-var appConfig = ConfigurationManager.AppSettings;
+
+var appConfigBuilder = new ConfigurationBuilder();
+appConfigBuilder.AddEnvironmentVariables();
+var appConfig = appConfigBuilder.Build();
 
 string dbname = appConfig["RDS_DB_NAME"];
 string username = appConfig["RDS_USERNAME"];
