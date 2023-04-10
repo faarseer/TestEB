@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TestEB.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 namespace TestEB.Controllers
 {
@@ -9,7 +11,6 @@ namespace TestEB.Controllers
     public class TodoItemsController : ControllerBase
     {
         private readonly TodoContext _todoContext;
-
         public TodoItemsController(TodoContext todoContext)
         {
             _todoContext = todoContext;
@@ -129,6 +130,47 @@ namespace TestEB.Controllers
                 Name = todoItem.Name,
                 IsComplete = todoItem.IsComplete
             };
+        }
+
+        [HttpPatch("{id}")]
+        public async Task<IActionResult> PatchTodoItem(int id, [FromBody] JsonPatchDocument<TodoItemDTO> patchDoc)
+        {
+            var _todoItem = await _todoContext.TodoItems.FindAsync(id);
+            if (_todoItem == null)
+            {
+                return NotFound();
+            }
+
+            var todoItemDTO = new TodoItemDTO
+            {
+                Id = _todoItem.Id,
+                Name = _todoItem.Name,
+                IsComplete = _todoItem.IsComplete
+            };
+
+            patchDoc.ApplyTo(todoItemDTO);
+
+            _todoItem.Name = todoItemDTO.Name;
+            _todoItem.IsComplete = todoItemDTO.IsComplete;
+
+            _todoContext.Entry(_todoItem).State = EntityState.Modified;
+
+            try
+            {
+                await _todoContext.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!TodoItemExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            return Ok(todoItemDTO);
         }
     }
 }
