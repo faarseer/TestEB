@@ -11,7 +11,6 @@ builder.Services.AddControllers();
 
 // Add Db
 //var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-//var connectionString = Helpers.GetRDSConnectionString();
 
 var appConfigBuilder = new ConfigurationBuilder();
 appConfigBuilder.AddEnvironmentVariables();
@@ -25,7 +24,6 @@ string port = appConfig["RDS_PORT"];
 
 var connectionString= "Server=" + hostname + ";Port=" + port + ";Database=" + dbname + ";Uid=" + username + ";pwd=" + password + ";";
 
-//var connectionString = "Server=awseb-e-7sevd4snji-stack-awsebrdsdatabase-5xhtsbabrtyq.c4leokrb7cia.ap-northeast-2.rds.amazonaws.com;Port=3306;Uid=admin;pwd=test123!;Database=ebdb;";
 var serverVersion = new MySqlServerVersion(new Version(8, 0, 32));
 builder.Services.AddDbContext<TodoContext>(options =>
 {
