@@ -11,5 +11,6 @@ namespace TestEB.Models
         }
 
         public DbSet<TodoItem> TodoItems { get; set; }
+        public DbSet<UserItem> UserItems { get; set; }
     }
 }
